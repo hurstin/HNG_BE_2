@@ -19,6 +19,12 @@ const sequelize = new Sequelize(uri, {
       require: true,
       rejectUnauthorized: false
     }
+  },
+  pool: {
+    max: 2,           // Very strict connection limits for serverless compatibility safely
+    min: 0,
+    acquire: 60000,   // Wait longer natively if pooling gets loaded 
+    idle: 10000
   }
 });
 
@@ -30,7 +36,7 @@ export const initDB = async () => {
     await sequelize.authenticate();
     console.log('\x1b[35m[Database]\x1b[0m \x1b[32m✔\x1b[0m Sequelize connected to PostgreSQL');
     
-    await sequelize.sync({ alter: true });
+    await sequelize.sync();
     console.log('\x1b[35m[Database]\x1b[0m \x1b[32m✔\x1b[0m Models synchronized');
   } catch (err) {
     console.error('\n\x1b[31m[Database]\x1b[0m ✘ Sequelize connection error:', err.stack, '\n');

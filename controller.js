@@ -125,6 +125,7 @@ export const getProfiles = async (req, res) => {
       data: rows,
     });
   } catch (error) {
+    console.error(error.stack);
     res.status(500).json({ status: "error", message: "Server failure" });
   }
 };
@@ -176,6 +177,7 @@ export const searchProfilesNL = async (req, res) => {
       data: rows
     });
   } catch (error) {
+    console.error(error.stack);
     res.status(500).json({ status: "error", message: "Server failure" });
   }
 };
