@@ -4,7 +4,13 @@ dotenv.config({ path: './config.env' });
 import { Sequelize } from 'sequelize';
 import { v7 as uuidv7 } from 'uuid';
 
-const uri = process.env.SERVICE_URI ? process.env.SERVICE_URI.split('?')[0] : '';
+const rawUri = process.env.SERVICE_URI || process.env.DATABASE_URL;
+if (!rawUri) {
+  console.error('\x1b[31m[Database]\x1b[0m ✘ Missing database connection URI! Please set SERVICE_URI or DATABASE_URL.');
+  process.exit(1);
+}
+
+const uri = rawUri.split('?')[0];
 const sequelize = new Sequelize(uri, {
   dialect: 'postgres',
   logging: false,
